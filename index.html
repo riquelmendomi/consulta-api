@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Ejercicio 4 – Asincronía JS</title>
+
+  <style>
+    * {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f7f7f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #6b6b6b;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #f7f7f5;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #ececec;
+    }
+
+    .progress {
+      height: 6px;
+      background: #eee;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    #progressBar {
+      width: 0%;
+      height: 100%;
+      background: #4a72ff;
+      transition: width 0.3s ease;
+    }
+
+    pre {
+      background: #f7f7f5;
+      padding: 12px;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <h1>Ejercicio 4 – Asincronía en JavaScript</h1>
+    <p class="subtitle">
+      Comparación entre Callbacks, Promesas y Async/Await
+    </p>
+
+    <div class="card">
+      <input
+        type="number"
+        id="userId"
+        placeholder="ID de usuario"
+        min="1"
+      />
+
+      <div class="buttons">
+        <button id="btnCallbacks">Callbacks</button>
+        <button id="btnPromesas">Promesas</button>
+        <button id="btnAsync">Async/Await</button>
+      </div>
+
+      <div class="progress">
+        <div id="progressBar"></div>
+      </div>
+
+      <pre id="output">Presiona un botón para ejecutar el flujo.</pre>
+    </div>
+  </div>
+
+  <script src="../consulta api/assets/js/index.js"></script>
+</body>
+</html>
