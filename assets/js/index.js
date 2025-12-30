@@ -1,9 +1,3 @@
-/*
-  ===============================
-  CÓDIGO BASE – NO MODIFICAR
-  ===============================
-*/
-
 // API para obtener datos de un usuario
 const obtenerUsuario = (id, callback) => {
   const demora = Math.random() * 1000 + 500;
@@ -49,18 +43,12 @@ const obtenerComentarios = (postId, callback) => {
   }, demora);
 };
 
-/*
-  ===============================
-  LÓGICA DEL EJERCICIO
-  ===============================
-*/
+/* ELEMENTOS DEL DOM Y UTILIDADES DE UI */
 
-// DOM
 const output = document.getElementById("output");
 const progressBar = document.getElementById("progressBar");
 const userIdInput = document.getElementById("userId");
 
-// UI helpers
 function resetUI() {
   output.textContent = "";
   progressBar.style.width = "0%";
@@ -74,11 +62,8 @@ function mostrarResultado(titulo, texto) {
   output.textContent = `${titulo}\n\n${texto}`;
 }
 
-/*
-  ===============================
-  PROMESAS (wrappers)
-===============================
-*/
+/* ENVOLTORIOS DE PROMESAS */
+
 const obtenerUsuarioPromise = (id) =>
   new Promise((resolve, reject) => {
     obtenerUsuario(id, (error, data) => {
@@ -103,16 +88,14 @@ const obtenerComentariosPromise = (id) =>
     });
   });
 
-/*
-  ===============================
-  CALLBACKS
-  ===============================
-*/
+/* PARTE 1 — CALLBACKS (Callback Hell) */
+
 document.getElementById("btnCallbacks").addEventListener("click", () => {
   const id = userIdInput.value;
   resetUI();
   avanzarProgreso(30);
 
+  console.log("Consultando usuario...");
   obtenerUsuario(id, (errUsuario, usuario) => {
     if (errUsuario) {
       avanzarProgreso(100);
@@ -122,6 +105,7 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
 
     avanzarProgreso(60);
 
+    console.log("Consultando posts del usuario...");
     obtenerPosts(usuario.id, (errPosts, posts) => {
       if (errPosts) {
         avanzarProgreso(100);
@@ -131,6 +115,7 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
 
       avanzarProgreso(90);
 
+      console.log("Consultando comentarios del post...");
       obtenerComentarios(posts[0].id, (errComentarios, comentarios) => {
         if (errComentarios) {
           avanzarProgreso(100);
@@ -148,23 +133,23 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
   });
 });
 
-/*
-  ===============================
-  PROMESAS
-  ===============================
-*/
+/* PARTE 2 — PROMESAS */
+
 document.getElementById("btnPromesas").addEventListener("click", () => {
   const id = userIdInput.value;
   resetUI();
   avanzarProgreso(30);
 
+  console.log("Consultando usuario...");
   obtenerUsuarioPromise(id)
     .then(usuario => {
       avanzarProgreso(60);
+      console.log("Consultando posts del usuario...");
       return obtenerPostsPromise(usuario.id);
     })
     .then(posts => {
       avanzarProgreso(90);
+      console.log("Consultando comentarios del post...");
       return obtenerComentariosPromise(posts[0].id);
     })
     .then(comentarios => {
@@ -180,23 +165,23 @@ document.getElementById("btnPromesas").addEventListener("click", () => {
     });
 });
 
-/*
-  ===============================
-  ASYNC / AWAIT
-  ===============================
-*/
+/* PARTE 3 — ASYNC / AWAIT */
+
 document.getElementById("btnAsync").addEventListener("click", async () => {
   const id = userIdInput.value;
   resetUI();
 
   try {
     avanzarProgreso(30);
+    console.log("Consultando usuario...");
     const usuario = await obtenerUsuarioPromise(id);
 
     avanzarProgreso(60);
+    console.log("Consultando posts del usuario...");
     const posts = await obtenerPostsPromise(usuario.id);
 
     avanzarProgreso(90);
+    console.log("Consultando comentarios del post...");
     const comentarios = await obtenerComentariosPromise(posts[0].id);
 
     avanzarProgreso(100);
