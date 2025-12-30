@@ -1,154 +1,165 @@
-// API para obtener datos de un usuario
+/*
+====================================================
+E4-M4 — Simulación de Consulta a Múltiples APIs
+====================================================
+*/
+
+/* ===================== APIs ===================== */
+
+// Usuario
 const obtenerUsuario = (id, callback) => {
   const demora = Math.random() * 1000 + 500;
   setTimeout(() => {
     if (!id) {
-      callback('Error: ID de usuario no proporcionado.', null);
+      console.error("Error: ID de usuario no proporcionado.");
+      callback("Error: ID de usuario no proporcionado.", null);
       return;
     }
     console.log(`Buscando usuario con ID: ${id}...`);
-    const usuario = { id: id, nombre: 'John Doe', email: 'john.doe@example.com' };
-    callback(null, usuario);
+    callback(null, { id, nombre: "John Doe", email: "john.doe@example.com" });
   }, demora);
 };
 
-// API para obtener los posts de un usuario
+// Posts
 const obtenerPosts = (userId, callback) => {
   const demora = Math.random() * 1000 + 500;
   setTimeout(() => {
     if (!userId) {
-      callback('Error: ID de usuario no proporcionado para buscar posts.', null);
+      console.error("Error: ID de usuario no proporcionado para buscar posts.");
+      callback("Error: ID de usuario no proporcionado para buscar posts.", null);
       return;
     }
     console.log(`Buscando posts del usuario con ID: ${userId}...`);
-    const posts = [
-      { id: 101, titulo: 'Mi primer post', contenido: '...' },
-      { id: 102, titulo: 'Mi segundo post', contenido: '...' }
-    ];
-    callback(null, posts);
+    callback(null, [
+      { id: 101, titulo: "Mi primer post", contenido: "..." },
+      { id: 102, titulo: "Mi segundo post", contenido: "..." }
+    ]);
   }, demora);
 };
 
-// API para obtener los comentarios de un post
+// Comentarios
 const obtenerComentarios = (postId, callback) => {
   const demora = Math.random() * 1000 + 500;
   setTimeout(() => {
     if (!postId) {
-      callback('Error: ID de post no proporcionado para buscar comentarios.', null);
+      console.error("Error: ID de post no proporcionado para buscar comentarios.");
+      callback("Error: ID de post no proporcionado para buscar comentarios.", null);
       return;
     }
     console.log(`Buscando comentarios del post con ID: ${postId}...`);
-    const comentarios = [
-      { id: 1, texto: '¡Excelente post!' },
-      { id: 2, texto: 'Muy informativo, gracias.' }
-    ];
-    callback(null, comentarios);
+    callback(null, [
+      { id: 1, texto: "¡Excelente post!" },
+      { id: 2, texto: "Muy informativo, gracias." }
+    ]);
   }, demora);
 };
 
-/* ==================================================
-   PARTE 1 — CALLBACKS (Callback Hell)
-================================================== */
+/* ===================== UI ===================== */
+
+const output = document.getElementById("output");
+const progressBar = document.getElementById("progressBar");
+const userIdInput = document.getElementById("userId");
+
+function resetUI() {
+  output.textContent = "";
+  progressBar.style.width = "0%";
+}
+
+function avanzarProgreso(p) {
+  progressBar.style.width = p + "%";
+}
+
+function mostrarResultado(titulo, texto) {
+  output.textContent = `${titulo}\n\n${texto}`;
+}
+
+/* ===================== PROMESAS ===================== */
+
+const obtenerUsuarioPromise = id =>
+  new Promise((resolve, reject) =>
+    obtenerUsuario(id, (e, d) => (e ? reject(e) : resolve(d)))
+  );
+
+const obtenerPostsPromise = id =>
+  new Promise((resolve, reject) =>
+    obtenerPosts(id, (e, d) => (e ? reject(e) : resolve(d)))
+  );
+
+const obtenerComentariosPromise = id =>
+  new Promise((resolve, reject) =>
+    obtenerComentarios(id, (e, d) => (e ? reject(e) : resolve(d)))
+  );
+
+/* ===================== CALLBACKS ===================== */
 
 document.getElementById("btnCallbacks").addEventListener("click", () => {
   console.clear();
-  const id = userIdInput.value;
   resetUI();
   avanzarProgreso(30);
 
-  obtenerUsuario(id, (errUsuario, usuario) => {
-    if (errUsuario) {
-      avanzarProgreso(100);
-      mostrarResultado("Resultado — Callbacks", errUsuario);
-      return;
-    }
+  obtenerUsuario(userIdInput.value, (e, usuario) => {
+    if (e) return mostrarResultado("Resultado — Callbacks", e);
 
     avanzarProgreso(60);
-
-    obtenerPosts(usuario.id, (errPosts, posts) => {
-      if (errPosts) {
-        avanzarProgreso(100);
-        mostrarResultado("Resultado — Callbacks", errPosts);
-        return;
-      }
+    obtenerPosts(usuario.id, (e, posts) => {
+      if (e) return mostrarResultado("Resultado — Callbacks", e);
 
       avanzarProgreso(90);
-
-      obtenerComentarios(posts[0].id, (errComentarios, comentarios) => {
-        if (errComentarios) {
-          avanzarProgreso(100);
-          mostrarResultado("Resultado — Callbacks", errComentarios);
-          return;
-        }
+      obtenerComentarios(posts[0].id, (e, comentarios) => {
+        if (e) return mostrarResultado("Resultado — Callbacks", e);
 
         avanzarProgreso(100);
         mostrarResultado(
           "Resultado — Callbacks",
-          `Usuario: ${usuario.nombre}\nPosts cargados\nComentarios: ${comentarios.length}`
+          `Usuario: ${usuario.nombre}\nComentarios: ${comentarios.length}`
         );
       });
     });
   });
 });
 
-/* ==================================================
-   PARTE 2 — PROMESAS
-================================================== */
+/* ===================== PROMESAS ===================== */
 
 document.getElementById("btnPromesas").addEventListener("click", () => {
   console.clear();
-  const id = userIdInput.value;
   resetUI();
   avanzarProgreso(30);
 
-  obtenerUsuarioPromise(id)
-    .then(usuario => {
+  obtenerUsuarioPromise(userIdInput.value)
+    .then(u => {
       avanzarProgreso(60);
-      return obtenerPostsPromise(usuario.id);
+      return obtenerPostsPromise(u.id);
     })
-    .then(posts => {
+    .then(p => {
       avanzarProgreso(90);
-      return obtenerComentariosPromise(posts[0].id);
+      return obtenerComentariosPromise(p[0].id);
     })
-    .then(comentarios => {
+    .then(c => {
       avanzarProgreso(100);
-      mostrarResultado(
-        "Resultado — Promesas",
-        `Usuario: John Doe\nPosts cargados\nComentarios: ${comentarios.length}`
-      );
+      mostrarResultado("Resultado — Promesas", `Comentarios: ${c.length}`);
     })
-    .catch(error => {
-      avanzarProgreso(100);
-      mostrarResultado("Resultado — Promesas", error);
-    });
+    .catch(e => mostrarResultado("Resultado — Promesas", e));
 });
 
-/* ==================================================
-   PARTE 3 — ASYNC / AWAIT
-================================================== */
+/* ===================== ASYNC / AWAIT ===================== */
 
 document.getElementById("btnAsync").addEventListener("click", async () => {
   console.clear();
-  const id = userIdInput.value;
   resetUI();
 
   try {
     avanzarProgreso(30);
-    const usuario = await obtenerUsuarioPromise(id);
+    const u = await obtenerUsuarioPromise(userIdInput.value);
 
     avanzarProgreso(60);
-    const posts = await obtenerPostsPromise(usuario.id);
+    const p = await obtenerPostsPromise(u.id);
 
     avanzarProgreso(90);
-    const comentarios = await obtenerComentariosPromise(posts[0].id);
+    const c = await obtenerComentariosPromise(p[0].id);
 
     avanzarProgreso(100);
-    mostrarResultado(
-      "Resultado — Async/Await",
-      `Usuario: ${usuario.nombre}\nPosts cargados\nComentarios: ${comentarios.length}`
-    );
-  } catch (error) {
-    avanzarProgreso(100);
-    mostrarResultado("Resultado — Async/Await", error);
+    mostrarResultado("Resultado — Async/Await", `Comentarios: ${c.length}`);
+  } catch (e) {
+    mostrarResultado("Resultado — Async/Await", e);
   }
 });
