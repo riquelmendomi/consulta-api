@@ -116,6 +116,7 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
   resetUI();
   avanzarProgreso(30);
 
+  console.log("Consultando usuario...");
   obtenerUsuario(id, (errUsuario, usuario) => {
     if (errUsuario) {
       avanzarProgreso(100);
@@ -125,6 +126,7 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
 
     avanzarProgreso(60);
 
+    console.log("Consultando posts del usuario...");
     obtenerPosts(usuario.id, (errPosts, posts) => {
       if (errPosts) {
         avanzarProgreso(100);
@@ -134,6 +136,7 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
 
       avanzarProgreso(90);
 
+      console.log("Consultando comentarios del post...");
       obtenerComentarios(posts[0].id, (errComentarios, comentarios) => {
         if (errComentarios) {
           avanzarProgreso(100);
@@ -161,13 +164,16 @@ document.getElementById("btnPromesas").addEventListener("click", () => {
   resetUI();
   avanzarProgreso(30);
 
+  console.log("Consultando usuario...");
   obtenerUsuarioPromise(id)
     .then(usuario => {
       avanzarProgreso(60);
+      console.log("Consultando posts del usuario...");
       return obtenerPostsPromise(usuario.id);
     })
     .then(posts => {
       avanzarProgreso(90);
+      console.log("Consultando comentarios del post...");
       return obtenerComentariosPromise(posts[0].id);
     })
     .then(comentarios => {
@@ -194,12 +200,15 @@ document.getElementById("btnAsync").addEventListener("click", async () => {
 
   try {
     avanzarProgreso(30);
+    console.log("Consultando usuario...");
     const usuario = await obtenerUsuarioPromise(id);
 
     avanzarProgreso(60);
+    console.log("Consultando posts del usuario...");
     const posts = await obtenerPostsPromise(usuario.id);
 
     avanzarProgreso(90);
+    console.log("Consultando comentarios del post...");
     const comentarios = await obtenerComentariosPromise(posts[0].id);
 
     avanzarProgreso(100);
