@@ -46,7 +46,9 @@ const obtenerComentarios = (postId, callback) => {
   }, demora);
 };
 
-/* ELEMENTOS DEL DOM Y UTILIDADES DE UI */
+/* ==================================================
+   ELEMENTOS DEL DOM Y UTILIDADES DE UI
+================================================== */
 
 const output = document.getElementById("output");
 const progressBar = document.getElementById("progressBar");
@@ -65,7 +67,9 @@ function mostrarResultado(titulo, texto) {
   output.textContent = `${titulo}\n\n${texto}`;
 }
 
-/* ENVOLTORIOS DE PROMESAS */
+/* ==================================================
+   ENVOLTORIOS DE PROMESAS
+================================================== */
 
 const obtenerUsuarioPromise = (id) =>
   new Promise((resolve, reject) => {
@@ -91,9 +95,12 @@ const obtenerComentariosPromise = (id) =>
     });
   });
 
-/* PARTE 1 — CALLBACKS (Callback Hell) */
+/* ==================================================
+   PARTE 1 — CALLBACKS (Callback Hell)
+================================================== */
 
 document.getElementById("btnCallbacks").addEventListener("click", () => {
+  console.clear();
   const id = userIdInput.value;
   resetUI();
   avanzarProgreso(30);
@@ -136,9 +143,12 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
   });
 });
 
-/* PARTE 2 — PROMESAS */
+/* ==================================================
+   PARTE 2 — PROMESAS
+================================================== */
 
 document.getElementById("btnPromesas").addEventListener("click", () => {
+  console.clear();
   const id = userIdInput.value;
   resetUI();
   avanzarProgreso(30);
@@ -168,9 +178,12 @@ document.getElementById("btnPromesas").addEventListener("click", () => {
     });
 });
 
-/* PARTE 3 — ASYNC / AWAIT */
+/* ==================================================
+   PARTE 3 — ASYNC / AWAIT
+================================================== */
 
 document.getElementById("btnAsync").addEventListener("click", async () => {
+  console.clear();
   const id = userIdInput.value;
   resetUI();
 
