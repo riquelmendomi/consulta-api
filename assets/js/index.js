@@ -1,19 +1,9 @@
-/*
-====================================================
-E4-M4 — Simulación de Consulta a Múltiples APIs
-Programación Asíncrona en JavaScript
-====================================================
-*/
-
-/* ==================================================
-   SIMULACIÓN DE APIs
-================================================== */
-
 // API para obtener datos de un usuario
 const obtenerUsuario = (id, callback) => {
   const demora = Math.random() * 1000 + 500;
   setTimeout(() => {
     if (!id) {
+      console.error("Error: ID de usuario no proporcionado.");
       callback('Error: ID de usuario no proporcionado.', null);
       return;
     }
@@ -28,6 +18,7 @@ const obtenerPosts = (userId, callback) => {
   const demora = Math.random() * 1000 + 500;
   setTimeout(() => {
     if (!userId) {
+      console.error("Error: ID de usuario no proporcionado para buscar posts.");
       callback('Error: ID de usuario no proporcionado para buscar posts.', null);
       return;
     }
@@ -45,6 +36,7 @@ const obtenerComentarios = (postId, callback) => {
   const demora = Math.random() * 1000 + 500;
   setTimeout(() => {
     if (!postId) {
+      console.error("Error: ID de post no proporcionado para buscar comentarios.");
       callback('Error: ID de post no proporcionado para buscar comentarios.', null);
       return;
     }
@@ -57,9 +49,7 @@ const obtenerComentarios = (postId, callback) => {
   }, demora);
 };
 
-/* ==================================================
-   ELEMENTOS DEL DOM Y UTILIDADES DE UI
-================================================== */
+/* ELEMENTOS DEL DOM Y UTILIDADES DE UI */
 
 const output = document.getElementById("output");
 const progressBar = document.getElementById("progressBar");
@@ -78,9 +68,7 @@ function mostrarResultado(titulo, texto) {
   output.textContent = `${titulo}\n\n${texto}`;
 }
 
-/* ==================================================
-   ENVOLTORIOS DE PROMESAS
-================================================== */
+/* ENVOLTORIOS DE PROMESAS */
 
 const obtenerUsuarioPromise = (id) =>
   new Promise((resolve, reject) => {
@@ -106,9 +94,7 @@ const obtenerComentariosPromise = (id) =>
     });
   });
 
-/* ==================================================
-   PARTE 1 — CALLBACKS (Callback Hell)
-================================================== */
+/* PARTE 1 — CALLBACKS (Callback Hell) */
 
 document.getElementById("btnCallbacks").addEventListener("click", () => {
   console.clear();
@@ -116,7 +102,6 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
   resetUI();
   avanzarProgreso(30);
 
-  console.log("Consultando usuario...");
   obtenerUsuario(id, (errUsuario, usuario) => {
     if (errUsuario) {
       avanzarProgreso(100);
@@ -126,7 +111,6 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
 
     avanzarProgreso(60);
 
-    console.log("Consultando posts del usuario...");
     obtenerPosts(usuario.id, (errPosts, posts) => {
       if (errPosts) {
         avanzarProgreso(100);
@@ -136,7 +120,6 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
 
       avanzarProgreso(90);
 
-      console.log("Consultando comentarios del post...");
       obtenerComentarios(posts[0].id, (errComentarios, comentarios) => {
         if (errComentarios) {
           avanzarProgreso(100);
@@ -154,9 +137,7 @@ document.getElementById("btnCallbacks").addEventListener("click", () => {
   });
 });
 
-/* ==================================================
-   PARTE 2 — PROMESAS
-================================================== */
+/* PARTE 2 — PROMESAS */
 
 document.getElementById("btnPromesas").addEventListener("click", () => {
   console.clear();
@@ -164,16 +145,13 @@ document.getElementById("btnPromesas").addEventListener("click", () => {
   resetUI();
   avanzarProgreso(30);
 
-  console.log("Consultando usuario...");
   obtenerUsuarioPromise(id)
     .then(usuario => {
       avanzarProgreso(60);
-      console.log("Consultando posts del usuario...");
       return obtenerPostsPromise(usuario.id);
     })
     .then(posts => {
       avanzarProgreso(90);
-      console.log("Consultando comentarios del post...");
       return obtenerComentariosPromise(posts[0].id);
     })
     .then(comentarios => {
@@ -189,9 +167,7 @@ document.getElementById("btnPromesas").addEventListener("click", () => {
     });
 });
 
-/* ==================================================
-   PARTE 3 — ASYNC / AWAIT
-================================================== */
+/* PARTE 3 — ASYNC / AWAIT */
 
 document.getElementById("btnAsync").addEventListener("click", async () => {
   console.clear();
@@ -200,15 +176,12 @@ document.getElementById("btnAsync").addEventListener("click", async () => {
 
   try {
     avanzarProgreso(30);
-    console.log("Consultando usuario...");
     const usuario = await obtenerUsuarioPromise(id);
 
     avanzarProgreso(60);
-    console.log("Consultando posts del usuario...");
     const posts = await obtenerPostsPromise(usuario.id);
 
     avanzarProgreso(90);
-    console.log("Consultando comentarios del post...");
     const comentarios = await obtenerComentariosPromise(posts[0].id);
 
     avanzarProgreso(100);
