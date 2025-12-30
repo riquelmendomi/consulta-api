@@ -47,55 +47,6 @@ const obtenerComentarios = (postId, callback) => {
 };
 
 /* ==================================================
-   ELEMENTOS DEL DOM Y UTILIDADES DE UI
-================================================== */
-
-const output = document.getElementById("output");
-const progressBar = document.getElementById("progressBar");
-const userIdInput = document.getElementById("userId");
-
-function resetUI() {
-  output.textContent = "";
-  progressBar.style.width = "0%";
-}
-
-function avanzarProgreso(porcentaje) {
-  progressBar.style.width = porcentaje + "%";
-}
-
-function mostrarResultado(titulo, texto) {
-  output.textContent = `${titulo}\n\n${texto}`;
-}
-
-/* ==================================================
-   ENVOLTORIOS DE PROMESAS
-================================================== */
-
-const obtenerUsuarioPromise = (id) =>
-  new Promise((resolve, reject) => {
-    obtenerUsuario(id, (error, data) => {
-      if (error) reject(error);
-      else resolve(data);
-    });
-  });
-
-const obtenerPostsPromise = (id) =>
-  new Promise((resolve, reject) => {
-    obtenerPosts(id, (error, data) => {
-      if (error) reject(error);
-      else resolve(data);
-    });
-  });
-
-const obtenerComentariosPromise = (id) =>
-  new Promise((resolve, reject) => {
-    obtenerComentarios(id, (error, data) => {
-      if (error) reject(error);
-      else resolve(data);
-    });
-  });
-
-/* ==================================================
    PARTE 1 — CALLBACKS (Callback Hell)
 ================================================== */
 
