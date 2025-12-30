@@ -6,6 +6,7 @@ const obtenerUsuario = (id, callback) => {
       callback('Error: ID de usuario no proporcionado.', null);
       return;
     }
+    console.log(`Buscando usuario con ID: ${id}...`);
     const usuario = { id: id, nombre: 'John Doe', email: 'john.doe@example.com' };
     callback(null, usuario);
   }, demora);
@@ -19,6 +20,7 @@ const obtenerPosts = (userId, callback) => {
       callback('Error: ID de usuario no proporcionado para buscar posts.', null);
       return;
     }
+    console.log(`Buscando posts del usuario con ID: ${userId}...`);
     const posts = [
       { id: 101, titulo: 'Mi primer post', contenido: '...' },
       { id: 102, titulo: 'Mi segundo post', contenido: '...' }
@@ -35,6 +37,7 @@ const obtenerComentarios = (postId, callback) => {
       callback('Error: ID de post no proporcionado para buscar comentarios.', null);
       return;
     }
+    console.log(`Buscando comentarios del post con ID: ${postId}...`);
     const comentarios = [
       { id: 1, texto: '¡Excelente post!' },
       { id: 2, texto: 'Muy informativo, gracias.' }
